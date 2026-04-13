@@ -1527,4 +1527,21 @@ function nextSlide() {
     }
 }
 
+// Modal Team Logic
+function openTeamModal() {
+    const modal = document.getElementById('team-modal');
+    const content = document.getElementById('team-modal-content');
+    modal.classList.remove('invisible', 'opacity-0', 'pointer-events-none');
+    content.classList.remove('scale-95', 'opacity-0');
+    content.classList.add('scale-100', 'opacity-100');
+}
+
+function closeTeamModal() {
+    const modal = document.getElementById('team-modal');
+    const content = document.getElementById('team-modal-content');
+    modal.classList.add('invisible', 'opacity-0', 'pointer-events-none');
+    content.classList.remove('scale-100', 'opacity-100');
+    content.classList.add('scale-95', 'opacity-0');
+}
+
 window.onload = init;

@@ -39,9 +39,11 @@
 
         <div class="flex items-center gap-6">
           <button
-            class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition shadow-lg"
+            onclick="openTeamModal()"
+            class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition shadow-lg relative group"
+            title="Anggota Kelompok"
           >
-            <i data-lucide="bell" class="w-5 h-5"></i>
+            <i data-lucide="users" class="w-5 h-5"></i>
           </button>
         </div>
       </div>
@@ -437,6 +439,51 @@
       </div>
 
     </main>
+
+    <!-- Modal Anggota Kelompok -->
+    <div id="team-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm invisible opacity-0 pointer-events-none transition-all duration-300 px-4">
+      <div id="team-modal-content" class="w-full max-w-md bg-white rounded-3xl shadow-2xl transform scale-95 opacity-0 transition-all duration-300 overflow-hidden relative border border-slate-100">
+        <button onclick="closeTeamModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 p-1.5 rounded-full transition-colors z-10"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="px-6 py-6 bg-[#107c41]/5 border-b border-[#107c41]/10">
+          <div class="flex items-center gap-4">
+             <div class="w-12 h-12 rounded-2xl bg-[#107c41]/10 flex items-center justify-center text-[#107c41] shadow-inner"><i data-lucide="users" class="w-6 h-6"></i></div>
+             <div>
+               <h2 class="text-xl font-black text-slate-800 tracking-tight leading-none mb-1">Anggota Kelompok 7</h2>
+               <p class="text-[11px] font-bold text-[#107c41] uppercase tracking-widest">Tim Proyek VISDAT</p>
+             </div>
+          </div>
+        </div>
+        <div class="p-6 bg-white">
+          <div class="space-y-1">
+            <!-- Ahmad Izzulkamal -->
+            <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-2 rounded-lg transition-colors">
+               <span class="font-bold text-slate-700 text-sm">Ahmad Izzulkamal</span>
+               <span class="font-mono text-xs font-bold text-[#107c41] bg-[#107c41]/10 px-2 py-1 rounded-md">202331217</span>
+            </div>
+            <!-- Muhammad Fadel Desyaputra -->
+            <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-2 rounded-lg transition-colors">
+               <span class="font-bold text-slate-700 text-sm">Muhammad Fadel Desyaputra</span>
+               <span class="font-mono text-xs font-bold text-[#107c41] bg-[#107c41]/10 px-2 py-1 rounded-md">202331098</span>
+            </div>
+            <!-- Davina Najwa Ermawan -->
+            <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-2 rounded-lg transition-colors">
+               <span class="font-bold text-slate-700 text-sm">Davina Najwa Ermawan</span>
+               <span class="font-mono text-xs font-bold text-[#107c41] bg-[#107c41]/10 px-2 py-1 rounded-md">202331111</span>
+            </div>
+            <!-- Muhammad Ihsan Hafidz -->
+            <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-2 rounded-lg transition-colors">
+               <span class="font-bold text-slate-700 text-sm">Muhammad Ihsan Hafidz</span>
+               <span class="font-mono text-xs font-bold text-[#107c41] bg-[#107c41]/10 px-2 py-1 rounded-md">202331221</span>
+            </div>
+            <!-- Muhammad Ridzieq Fachriansyah -->
+            <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-2 rounded-lg transition-colors">
+               <span class="font-bold text-slate-700 text-sm">Muhammad Ridzieq F.</span>
+               <span class="font-mono text-xs font-bold text-[#107c41] bg-[#107c41]/10 px-2 py-1 rounded-md">202331070</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>
