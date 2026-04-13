@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tugas Kelompok VisDat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="min-h-screen">
+    <!-- Header Utama -->
+    <header class="bg-[#107c41] text-white sticky top-0 z-50 overflow-hidden">
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent pointer-events-none"
+      ></div>
+      <div
+        class="max-w-[1600px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between relative z-10"
+      >
+        <div class="flex items-center gap-3 md:gap-5">
+          <div
+            class="bg-white/15 p-2 md:p-2.5 rounded-2xl backdrop-blur-md border border-white/20 shadow-inner"
+          >
+            <i data-lucide="layout-grid" class="w-6 h-6 md:w-7 md:h-7"></i>
+          </div>
+          <div>
+            <h1 class="font-extrabold text-base md:text-xl tracking-tight leading-none mb-1">
+              Analisis dan Visualisasi Data™
+            </h1>
+            <div class="flex items-center gap-2 opacity-70">
+              <span
+                class="text-[9px] font-bold uppercase tracking-widest bg-white/20 px-1.5 py-0.5 rounded"
+                >Kelas A</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <button
+            class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition shadow-lg"
+          >
+            <i data-lucide="bell" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigasi Tab -->
+    <nav
+      class="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-20 z-40"
+    >
+      <div class="max-w-[1600px] mx-auto px-1 md:px-8 flex justify-center w-full">
+        <button
+          onclick="switchTab('raw')"
+          id="tab-raw"
+          class="tab-button py-3 md:py-5 px-1 md:px-8 text-[10px] sm:text-xs md:text-sm font-bold flex flex-col md:flex-row items-center gap-1 md:gap-3 active w-1/3 md:w-auto text-center justify-center"
+        >
+          <i data-lucide="layers" class="w-4 h-4"></i> Sumber Data
+        </button>
+        <button
+          onclick="switchTab('pivot')"
+          id="tab-pivot"
+          class="tab-button py-3 md:py-5 px-1 md:px-8 text-[10px] sm:text-xs md:text-sm font-bold flex flex-col md:flex-row items-center gap-1 md:gap-3 text-slate-400 hover:text-slate-600 w-1/3 md:w-auto text-center justify-center"
+        >
+          <i data-lucide="component" class="w-4 h-4"></i> Analisis Pivot
+        </button>
+        <button
+          onclick="switchTab('presentation')"
+          id="tab-presentation"
+          class="tab-button py-3 md:py-5 px-1 md:px-8 text-[10px] sm:text-xs md:text-sm font-bold flex flex-col md:flex-row items-center gap-1 md:gap-3 text-slate-400 hover:text-slate-600 w-1/3 md:w-auto text-center justify-center"
+        >
+          <i data-lucide="monitor-play" class="w-4 h-4"></i> Slide Presentasi
+        </button>
+      </div>
+    </nav>
+
+    <main class="max-w-[1600px] mx-auto p-6 md:p-10 lg:p-12">
+      <!-- Tab 1: Sumber Data -->
+      <div id="content-raw" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative">
+        <!-- Kolom Kiri: Tahapan Pengolahan Data (Modal on Mobile) -->
+        <!-- Floating Button Mobile -->
+        <button onclick="document.getElementById('tahapan-modal').classList.remove('invisible', 'opacity-0', 'pointer-events-none'); document.getElementById('tahapan-modal-content').classList.remove('translate-y-full')" class="lg:hidden fixed bottom-6 right-6 z-40 bg-indigo-600 text-white p-4 rounded-full shadow-[0_10px_25px_-5px_var(--tw-shadow-color)] shadow-indigo-600/50 hover:bg-indigo-700 transition-all hover:scale-110 flex items-center justify-center animate-bounce">
+            <i data-lucide="help-circle" class="w-7 h-7"></i>
+        </button>
+
+        <div id="tahapan-modal" class="fixed inset-0 z-50 lg:static lg:z-auto lg:col-span-4 flex items-end lg:items-start justify-center bg-slate-900/60 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none invisible opacity-0 pointer-events-none lg:visible lg:opacity-100 lg:pointer-events-auto transition-all duration-300">
+          <div id="tahapan-modal-content" class="w-full lg:w-auto glass-card overflow-hidden sticky lg:top-36 max-h-[85vh] lg:max-h-none rounded-t-[2rem] lg:rounded-2xl transform translate-y-full lg:translate-y-0 transition-transform duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.15)] lg:shadow-none flex flex-col relative pb-0">
+            <!-- Close Modal Mobile -->
+            <button onclick="document.getElementById('tahapan-modal').classList.add('invisible', 'opacity-0', 'pointer-events-none'); document.getElementById('tahapan-modal-content').classList.add('translate-y-full')" class="lg:hidden absolute top-3.5 right-4 text-white hover:text-slate-200 z-[60] bg-white/20 hover:bg-white/30 p-1.5 rounded-full transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+
+          <div class="px-6 py-5 pr-14 lg:pr-6 border-b border-slate-100 bg-slate-800/95 backdrop-blur-md shrink-0">
+            <h2 class="text-[13px] md:text-[14px] leading-tight font-black text-white tracking-widest text-left lg:text-center uppercase mt-0.5">
+              Tahapan Pengolahan Data & Visualisasi
+            </h2>
+          </div>
+          <div class="overflow-y-auto flex-1 custom-scrollbar">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-indigo-600/10 text-indigo-900 border-b-2 border-indigo-200">
+                  <th class="p-3 md:p-4 font-black w-12 text-center uppercase tracking-wider text-[10px]">No.</th>
+                  <th class="p-3 md:p-4 font-black w-1/3 uppercase tracking-wider text-[10px]">Tahapan</th>
+                  <th class="p-3 md:p-4 font-black uppercase tracking-wider text-[10px]">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody class="text-slate-600 bg-white/50">
+                <tr class="border-b border-slate-100/50 hover:bg-white transition">
+                  <td class="p-3 md:p-4 text-center font-bold text-slate-800 font-mono bg-slate-50/50">1</td>
+                  <td class="p-3 md:p-4 font-bold text-slate-800">Pengumpulan Data</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-medium">Data transaksi 100 baris: ID Transaksi, Kota (4 kota), Kategori (3 kategori), Produk, Penjualan.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-white transition">
+                  <td class="p-3 md:p-4 text-center font-bold text-slate-800 font-mono bg-slate-50/50">2</td>
+                  <td class="p-3 md:p-4 font-bold text-slate-800">Pembersihan Data</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-medium">Cek nilai kosong, duplikat, dan tipe data. Kolom Penjualan dipastikan numerik.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-white transition">
+                  <td class="p-3 md:p-4 text-center font-bold text-slate-800 font-mono bg-slate-50/50">3</td>
+                  <td class="p-3 md:p-4 font-bold text-slate-800">Transformasi & Aggregasi</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-medium">Data dikelompokkan menggunakan GROUP BY untuk SUM Penjualan per dimensi yang diinginkan.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-indigo-50/30 transition bg-indigo-50/10">
+                  <td class="p-3 md:p-4 text-center font-bold text-indigo-900 font-mono bg-indigo-100/20">4</td>
+                  <td class="p-3 md:p-4 font-bold text-indigo-900">Pivot 1 – Per Kota</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-semibold text-indigo-800">Total & persentase penjualan per kota. Grafik: Bar Chart perbandingan antar kota.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-indigo-50/30 transition bg-indigo-50/10">
+                  <td class="p-3 md:p-4 text-center font-bold text-indigo-900 font-mono bg-indigo-100/20">5</td>
+                  <td class="p-3 md:p-4 font-bold text-indigo-900">Pivot 2 – Per Kategori</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-semibold text-indigo-800">Total & persentase penjualan per kategori produk.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-white transition">
+                  <td class="p-3 md:p-4 text-center font-bold text-slate-800 font-mono bg-slate-50/50">6</td>
+                  <td class="p-3 md:p-4 font-bold text-slate-800">Pivot 3 – Kota, Kategori & Produk</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-medium">Detail penjualan hingga level produk, dikelompokkan per kota dan kategori.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-indigo-50/30 transition bg-indigo-50/10">
+                  <td class="p-3 md:p-4 text-center font-bold text-indigo-900 font-mono bg-indigo-100/20">7</td>
+                  <td class="p-3 md:p-4 font-bold text-indigo-900">Pivot 4 – Perbandingan Kota/Kategori</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-semibold text-indigo-800">Cross-tab matrix: baris=Kota, kolom=Kategori. Bar grouped chart untuk perbandingan langsung.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-white transition">
+                  <td class="p-3 md:p-4 text-center font-bold text-slate-800 font-mono bg-slate-50/50">8</td>
+                  <td class="p-3 md:p-4 font-bold text-slate-800">Pivot 5 – Proporsi</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-medium">Pie/Doughnut chart kontribusi tiap kota dan kategori terhadap total penjualan.</td>
+                </tr>
+                <tr class="border-b border-slate-100/50 hover:bg-indigo-50/30 transition bg-indigo-50/10">
+                  <td class="p-3 md:p-4 text-center font-bold text-indigo-900 font-mono bg-indigo-100/20">9</td>
+                  <td class="p-3 md:p-4 font-bold text-indigo-900">Pivot 6 – Penjualan per Kategori</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-semibold text-indigo-800">Breakdown produk dalam setiap kategori disertai Bar Chart per kategori.</td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition border-b-4 border-slate-800">
+                  <td class="p-3 md:p-4 text-center font-bold text-slate-900 font-mono bg-slate-200/50">10</td>
+                  <td class="p-3 md:p-4 font-black text-slate-900 uppercase">Interpretasi</td>
+                  <td class="p-3 md:p-4 leading-relaxed font-black text-slate-800 bg-slate-50">Jakarta & Elektronik mendominasi. Kuliner memiliki volume transaksi tinggi namun nilai terendah.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Tabel Data -->
+        <div class="col-span-1 lg:col-span-8 flex flex-col gap-8 animate-fade">
+          <!-- Tabel 1: Data Mentah (Belum Dibersihkan) -->
+          <div class="glass-card overflow-hidden">
+          <div
+            class="p-8 border-b border-slate-100 flex items-center justify-between"
+          >
+            <div>
+              <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">
+                Data Mentah
+              </h2>
+              <p class="text-slate-400 text-xs mt-1">
+                Data mentah: duplikat, penamaan tidak konsisten,
+                salah ketik, dan nilai kosong.
+              </p>
+            </div>
+            <button
+              class="flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-900 transition shadow-lg"
+            >
+              <i data-lucide="download" class="w-4 h-4"></i> Ekspor .CSV
+            </button>
+          </div>
+          <div class="table-container overflow-auto max-h-[60vh]">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr>
+                  <th class="excel-cell excel-header w-20 text-center">No</th>
+                  <th class="excel-cell excel-header">ID Transaksi</th>
+                  <th class="excel-cell excel-header">Kota</th>
+                  <th class="excel-cell excel-header">Kategori</th>
+                  <th class="excel-cell excel-header">Produk</th>
+                  <th class="excel-cell excel-header text-right">
+                    Penjualan (Rp)
+                  </th>
+                  <th class="excel-cell excel-header text-center">Masalah</th>
+                </tr>
+              </thead>
+              <tbody id="uncleaned-table-body" class="text-slate-600"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabel 2: Data Yang Sudah Dibersihkan -->
+        <div class="glass-card overflow-hidden">
+          <div
+            class="p-8 border-b border-slate-100 flex items-center justify-between"
+          >
+            <div>
+              <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">
+                Daftar Data Utama
+              </h2>
+              <p class="text-slate-400 text-xs mt-1">
+                100 Data yang digunakan untuk membuat Visualisasi.
+              </p>
+            </div>
+            <button
+              class="flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-900 transition shadow-lg"
+            >
+              <i data-lucide="download" class="w-4 h-4"></i> Ekspor .CSV
+            </button>
+          </div>
+          <div class="table-container overflow-auto max-h-[60vh]">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr>
+                  <th class="excel-cell excel-header w-20 text-center">
+                    No
+                  </th>
+                  <th class="excel-cell excel-header">ID Transaksi</th>
+                  <th class="excel-cell excel-header">Kota</th>
+                  <th class="excel-cell excel-header">Kategori</th>
+                  <th class="excel-cell excel-header">Produk</th>
+                  <th class="excel-cell excel-header text-right">
+                    Nilai Penjualan
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="raw-table-body" class="text-slate-600"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- Tab 2: Analisis Pivot -->
+      <div id="content-pivot" class="hidden space-y-10 animate-fade">
+        <!-- Bar Filter Pivot -->
+        <div class="glass-card p-4 md:p-6">
+          <div class="flex flex-col md:flex-row flex-wrap md:items-center gap-4 md:gap-6">
+            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 w-full md:w-auto">
+              <div class="flex items-center gap-2">
+                <i data-lucide="filter" class="w-4 h-4 text-slate-400"></i>
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Filter Kota</span>
+              </div>
+              <div id="pivot-slicer-city" class="flex flex-wrap gap-2"></div>
+            </div>
+            <div class="h-8 w-px bg-slate-200 hidden lg:block"></div>
+            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 w-full md:w-auto">
+              <div class="flex items-center gap-2">
+                <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i>
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Filter Kategori</span>
+              </div>
+              <div id="pivot-slicer-cat" class="flex flex-wrap gap-2"></div>
+            </div>
+            <button onclick="resetPivotFilters()" class="w-full md:w-auto mt-2 md:mt-0 ml-0 md:ml-auto text-[10px] font-bold text-green-600 justify-center hover:text-green-800 flex items-center gap-1 px-3 py-3 md:py-1.5 rounded-lg border border-green-200 hover:bg-green-50 transition">
+              <i data-lucide="rotate-ccw" class="w-3 h-3"></i> RESET SEMUA
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div class="glass-card p-10">
+            <div class="flex items-center gap-4 mb-8">
+              <div
+                class="w-12 h-12 rounded-2xl kpi-gradient-green flex items-center justify-center text-green-700 shadow-sm border border-green-200"
+              >
+                <i data-lucide="map-pin"></i>
+              </div>
+              <div>
+                <h3 class="font-black text-slate-800 text-lg">
+                  Pivot Tabel Wilayah
+                </h3>
+                <p
+                  class="text-slate-400 text-[10px] uppercase font-bold tracking-widest"
+                >
+                  Agregasi per Kota
+                </p>
+              </div>
+            </div>
+            <div id="pivot-city-tbl"></div>
+            <div class="mt-8 pt-6 border-t border-slate-100">
+              <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Pendapatan per Wilayah</h4>
+              <div class="h-[250px]"><canvas id="pivot-chart-city"></canvas></div>
+            </div>
+          </div>
+          <div class="glass-card p-10">
+            <div class="flex items-center gap-4 mb-8">
+              <div
+                class="w-12 h-12 rounded-2xl kpi-gradient-blue flex items-center justify-center text-blue-700 shadow-sm border border-blue-200"
+              >
+                <i data-lucide="briefcase"></i>
+              </div>
+              <div>
+                <h3 class="font-black text-slate-800 text-lg">
+                  Pivot Tabel Kategori
+                </h3>
+                <p
+                  class="text-slate-400 text-[10px] uppercase font-bold tracking-widest"
+                >
+                  Agregasi per Kategori
+                </p>
+              </div>
+            </div>
+            <div id="pivot-cat-tbl"></div>
+            <div class="mt-8 pt-6 border-t border-slate-100">
+              <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Pangsa Pasar per Sektor</h4>
+              <div class="h-[250px]"><canvas id="pivot-chart-cat"></canvas></div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card p-10">
+          <div class="text-center mb-10">
+            <h3 class="font-black text-slate-800 text-2xl tracking-tighter">
+              Pivot Tabel Kota x Kategori
+            </h3>
+            <p class="text-slate-400 text-sm mt-1">
+              Interaksi antara Wilayah Geografis dan Kategori Produk.
+            </p>
+          </div>
+          <div
+            id="pivot-multi-tbl"
+            class="overflow-x-auto rounded-[2rem] border border-slate-100"
+          ></div>
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 text-center">Pendapatan Bertumpuk per Wilayah × Sektor</h4>
+            <div class="h-[350px]"><canvas id="pivot-chart-multi"></canvas></div>
+          </div>
+        </div>
+
+        <!-- PIVOT 5: Proporsi Penjualan -->
+        <div class="glass-card p-10">
+          <div class="text-center mb-10">
+            <h3 class="font-black text-slate-800 text-2xl tracking-tighter">
+              Proporsi Penjualan
+            </h3>
+            <p class="text-slate-400 text-sm mt-1">
+              Analisis persentase penjualan per kota dan kategori.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div>
+              <div
+                id="pivot-proportion-city-tbl"
+                class="overflow-x-auto rounded-xl border border-slate-100"
+              ></div>
+              <div class="mt-6 pt-4 border-t border-slate-100">
+                <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 text-center">Proporsi per Kota</h4>
+                <div class="h-[280px]"><canvas id="pivot-chart-prop-city"></canvas></div>
+              </div>
+            </div>
+            <div>
+              <div
+                id="pivot-proportion-cat-tbl"
+                class="overflow-x-auto rounded-xl border border-slate-100"
+              ></div>
+              <div class="mt-6 pt-4 border-t border-slate-100">
+                <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 text-center">Proporsi per Kategori</h4>
+                <div class="h-[280px]"><canvas id="pivot-chart-prop-cat"></canvas></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PIVOT 6: Penjualan per Kategori & Produk -->
+        <div class="glass-card p-10">
+          <div class="text-center mb-10">
+            <h3 class="font-black text-slate-800 text-2xl tracking-tighter">
+              Penjualan per Kategori &amp; Produk
+            </h3>
+            <p class="text-slate-400 text-sm mt-1">
+              Detail penjualan produk tersegmentasi per kategori dengan 10
+              produk teratas.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div
+              id="pivot-product-cat-tbl"
+              class="overflow-x-auto rounded-xl border border-slate-100 max-h-[500px]"
+            ></div>
+            <div class="glass-card p-6 bg-slate-50">
+              <h4 class="font-black text-slate-800 text-lg mb-6 text-center">
+                10 Produk Teratas Berdasarkan Penjualan
+              </h4>
+              <div class="h-[400px]">
+                <canvas id="chart-top-products"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Slide Presentasi -->
+      <div id="content-presentation" class="hidden animate-fade px-4 lg:px-0">
+        <div class="glass-card shadow-2xl p-4 md:p-8 relative flex flex-col items-center max-w-5xl mx-auto">
+            
+            <div class="relative w-full rounded-2xl overflow-hidden aspect-[16/9] bg-slate-900 border border-slate-700/50 shadow-inner group">
+                <img id="presentation-slide" src="slides/image1.png" class="absolute top-0 left-0 w-full h-[102.5%] object-cover object-top" alt="Slide Presentasi">
+                
+                <!-- Navigation Controls -->
+                <button onclick="prevSlide()" class="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/90 hover:scale-110 text-white rounded-full p-2 md:p-4 backdrop-blur-md transition-all focus:outline-none shadow-xl opacity-0 group-hover:opacity-100 disabled:opacity-0">
+                    <i data-lucide="chevron-left" class="w-6 h-6 md:w-8 md:h-8"></i>
+                </button>
+                <button onclick="nextSlide()" class="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/90 hover:scale-110 text-white rounded-full p-2 md:p-4 backdrop-blur-md transition-all focus:outline-none shadow-xl opacity-0 group-hover:opacity-100 disabled:opacity-0">
+                    <i data-lucide="chevron-right" class="w-6 h-6 md:w-8 md:h-8"></i>
+                </button>
+            </div>
+
+            <!-- Header and Counters -->
+            <div class="mt-8 flex flex-col md:flex-row items-center justify-between w-full px-2 md:px-6 gap-4">
+                <div>
+                   <h3 class="text-xl font-black text-slate-800 tracking-tight">Executive Sales Performance</h3>
+                   <p class="text-sm font-bold text-slate-400">Presentasi Teori &amp; Analisis</p>
+                </div>
+                <div class="flex items-center gap-4 bg-slate-100 px-6 py-3 rounded-xl border border-slate-200">
+                   <button onclick="prevSlide()" class="w-8 h-8 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-slate-50 text-slate-600 transition"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+                   <div class="text-sm font-black text-slate-700 min-w-[80px] text-center tracking-widest">
+                       <span id="current-slide" class="text-indigo-600 text-lg">1</span> / 7
+                   </div>
+                   <button onclick="nextSlide()" class="w-8 h-8 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-slate-50 text-slate-600 transition"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                </div>
+            </div>
+            
+        </div>
+      </div>
+
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
